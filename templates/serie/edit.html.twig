@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une série{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-center mb-2">
+            <div class="col-auto">
+                <a class="btn btn-danger rounded-pill" href="{{ path('app_serie_index') }}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <div class="col">
+                <h1>Modifier une série</h1>
+            </div>
+
+            <div class="col-auto">
+                {{ include('serie/_delete_form.html.twig') }}
+            </div>
+        </div>
+
+        {{ include('serie/_form.html.twig', {'button_label': 'Update'}) }}
+    </div>
+{% endblock %}

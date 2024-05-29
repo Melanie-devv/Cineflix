@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Série{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-center mb-2">
+            <div class="col-auto me-auto">
+                <a class="btn btn-danger rounded-pill" href="{{ path('app_serie_index') }}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+            
+            {% if is_granted('ROLE_ADMIN')  %}
+                <div class="col-auto">
+                    <div class="row gx-1">
+                        <div class="col-auto">
+                            <a class="btn btn-danger rounded-pill" href="{{ path('app_serie_edit', {'id': serie.id}) }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            {{ include('serie/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-sm-6 col-md-4 col-xl-3">
+                <img 
+                    class="img-fluid rounded ratio ratio-1x1 mb-2 border shadow-sm" 
+                    src="{{ serie.thumbnail }}" 
+                    alt="serie thumbnail"
+                    style="max-width: 20rem;"
+                >
+                <div class="text-secondary fw-bold">
+                    <div class="text-uppercase">{{ serie.episodes | length }} Episodes - {{ serie.season }} saisons</div>
+                    <div>{{ serie.releaseDate ? serie.releaseDate|date('d/m/Y') : '' }}</div>
+                </div>
+            </div>
+            
+            <div class="col">
+                <h1 class="mb-0">
+                    {{ serie.title }}
+                    <small>
+                        <span class="badge rounded-pill text-bg-danger">{{ serie.typeLabel }}</span>
+                    </small>
+                </h1>
+                <h2 class="h3 mb-3">
+                    <a 
+                        class="link-danger link-underline-opacity-0 link-underline-opacity-100-hover" 
+                        href="{{ path('app_artist_show', { id: serie.artist.id }) }}"
+                    >
+                        {{ serie.artist.name }}
+                    </a>
+                </h2>
+
+                <div class="mb-4">
+                    <button class="btn btn-danger">
+                        <i class="fa-solid fa-play"></i>
+                        Lecture
+                    </button>
+                    <button class="btn btn-danger">
+                        <i class="fa-solid fa-shuffle"></i>
+                        Aléatoire
+                    </button>
+                </div>
+
+                <ul class="bg-white border rounded list-unstyled episode-list overflow-hidden mb-0">
+                    {% for episode in serie.episodes %}
+                        <li class="px-3 py-1">
+                            <div class="row align-items-center gx-2">
+                                <div class="col-auto">
+                                    <i class="fa-solid fa-play text-danger cursor-pointer"></i>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        {{ episode.title }}
+                                    </div>
+
+                                    {% if episode.featuring|length %}
+                                        <div class="small text-secondary">
+                                            avec {{ episode.featuring|join(', ')}}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-auto">
+                                    {{ episode.readableDuration }}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <div class="text-secondary">
+                    Durée totale : {{ serie.readableDuration }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

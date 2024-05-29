@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un épisode{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <div class="row mb-2 align-items-center">
+            <div class="col-auto">
+                <a class="btn btn-danger rounded-pill" href="{{ path('app_episode_index') }}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <div class="col">
+                <h1>Modifier un épisode</h1>
+            </div>
+
+            <div class="col-auto">
+                {{ include('episode/_delete_form.html.twig') }}
+            </div>
+        </div>
+
+        {{ include('episode/_form.html.twig', {'button_label': 'Update'}) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+<section class="section-hero py-5" data-bs-theme="dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-xl-8">
+                <h1 class="fw-bold display-3">VOS SERIES ET <span class="text-danger">FILMS</span></h1>
+                <p class="lead">
+                    Découvrez notre vaste collection de films, séries et épisodes. Parcourez, explorez et réservez des DVD exclusifs de vos films préférés. Proposé par la communauté CINEFLIX.
+                </p>
+                <a href="{{ path('app_artist_index') }}" class="btn btn-lg btn-danger">
+                    Voir les artistes
+                    <i class="fa-solid fa-arrow-right-long"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <h1 class="mb-4">Une nouvelle manière de découvrir</h1>
+        <div class="row">
+            <div class="col-md-6 col-lg-4">
+                <div class="display-2 text-danger">
+                    <i class="fa-solid fa-film"></i>
+                </div>
+                <h2 class="h4">Des films, des séries et bien plus.</h2>
+                <p>
+                    Découvrez notre bibliothèque d'inforformation sur des dizaines d'épisodes, de films ou de series. Gratuite mis à disposition de nos utilisateurs, le tout dans un seul site web.
+                </p>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="display-2 text-danger">
+                    <i class="fa-solid fa-tv"></i>
+                </div>
+                <h2 class="h4">Reservez un DVD.</h2>
+                <p>
+                    CINEFLIX propose à ses utilisateurs un DVD gratuit par mois, à choisir parmi un vaste choix de films populaire. Pour que vous puissiez profiter d'une bonne soirée entre amis.
+                </p>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="display-2 text-danger">
+                    <i class="fa-solid fa-comments"></i>
+                </div>
+                <h2 class="h4">A l'écoute de ses utilisateurs.</h2>
+                <p>
+                    Rejoingnez la communauté CINEFLIX et proposez nous vos meilleures suggestions. Pour un site en constante expansion et qui se construit à votre image.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5" style="background-color: var(--bs-gray-200);">
+    <div class="container">
+        <h1>Contribuez au projet</h1>
+        <p>
+            Vous avez une série populaire en tête ? <br />
+            Connectez vous pour nous soummetre votre suggestion et elle sera ajoutée à ce site ^^ !
+        </p>
+        {% if not is_granted('ROLE_USER') %}
+            <a href="{{ path('app_register') }}" class="btn btn-danger">
+                <i class="fa-solid fa-file-signature"></i>
+                Créer un compte
+            </a>
+            <a href="{{ path('app_login') }}" class="btn btn-danger">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                J'ai déjà un compte
+            </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

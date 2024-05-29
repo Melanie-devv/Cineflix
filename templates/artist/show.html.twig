@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Artist{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-center mb-2">
+            <div class="col-auto me-auto">
+                <a class="btn btn-danger rounded-pill" href="{{ path('app_artist_index') }}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+            
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="col-auto">
+                    <div class="row gx-1">
+                        <div class="col-auto">
+                            <a class="btn btn-danger rounded-pill" href="{{ path('app_artist_edit', {'id': artist.id}) }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            {{ include('artist/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-auto">
+                <img 
+                    class="img-fluid rounded thumbnail" 
+                    src="{{ artist.thumbnail }}" 
+                    alt="Artist thumbnail"
+                    style="height: 10rem; width: 10rem;"
+                >
+            </div>
+
+            <div class="col">
+                <h1>{{ artist.name }}</h1>
+
+                <p class="lead text-secondary">
+                    {{ artist.bio }}
+                </p>
+            </div>
+        </div>
+
+        <h2>Films (réalisation)</h2>
+        <div class="row gy-2 mb-4">
+            {% for serie in artist.series %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="card mx-auto mx-sm-0" style="max-width: 16rem">
+                        <img src="{{ serie.thumbnail }}" alt="serie thumbnail" class="card-img-top">
+                        <div class="card-body">
+                            <h3 class="h5 card-title mb-0">{{ serie.title }}</h3>
+                            {{ serie.releaseDate ? serie.releaseDate|date('Y') : '' }} 
+                            - {{ serie.season }} saisons
+                            <span class="badge rounded-pill text-bg-danger">{{ serie.typeLabel }}</span>
+                            <a href="{{ path('app_serie_show', {'id': serie.id}) }}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col">
+                    <div class="alert alert-info">Il ou elle n'a pas créé de film.</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2>Apparaît dans</h2>
+        <div class="row gy-2 mb-4">
+            {% for episode in artist.featurings %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="card mx-auto mx-sm-0" style="max-width: 16rem">
+                        <img src="{{ episode.serie.thumbnail }}" alt="serie thumbnail" class="card-img-top">
+                        <div class="card-body">
+                            <h3 class="h5 card-title mb-0">{{ episode.title }}</h3>
+                            {{ episode.serie.releaseDate ? episode.serie.releaseDate|date('Y') : '' }}
+                            <span class="badge rounded-pill text-bg-danger">{{ episode.serie.typeLabel }}</span>
+                            <a href="{{ path('app_episode_show', {'id': episode.id}) }}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col">
+                    <div class="alert alert-info">L'artiste n'apparait dans aucun épisode.</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

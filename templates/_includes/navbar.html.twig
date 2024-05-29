@@ -1,0 +1,75 @@
+<nav class="navbar navbar-expand-lg text-bg-danger sticky-top" data-bs-theme="dark">
+	<div class="container">
+		<a class="navbar-brand" href="/">
+            CINEFLIX - 
+        </a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				{% set current_page = app.request.pathinfo %}
+
+				<li class="nav-item me-3">
+					<a class="nav-link {{ '/artist' not in current_page ? 'active' : '' }}" aria-current="page" href="/artist">
+						<i class="fa-solid fa-users"></i>
+						Artistes 
+					</a>
+				</li>
+				<li class="nav-item me-3">
+					<a class="nav-link {{ '/serie' not in current_page ? 'active' : '' }}" aria-current="page" href="/serie">
+						<i class="fa-solid fa-film"></i>
+						Séries 
+					</a>
+				</li>
+				<li class="nav-item me-3">
+					<a class="nav-link {{ '/episode' not in current_page ? 'active' : '' }}" aria-current="page" href="/episode">
+						<i class="fa-solid fa-play-circle"></i>
+						Episodes 
+					</a>
+				</li>
+			</ul>
+
+			<ul class="navbar-nav" data-bs-theme="light">
+				{% if is_granted('ROLE_USER') %}
+					<li class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
+							<i class="fa-solid fa-circle-user"></i>
+							{{ app.user.firstname }}
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="{{ path('app_profile') }}" class="dropdown-item">
+									<i class="fa-solid fa-fw fa-user"></i>
+									Profil
+								</a>
+							</li>
+							{% if is_granted('ROLE_ADMIN') %}
+								<li>
+									<a href="{{ path('app_user_index') }}" class="dropdown-item">
+										<i class="fa-solid fa-fw fa-users"></i>
+										Utilisateurs
+									</a>
+								</li>
+							{% endif %}
+							<li>
+								<a href="{{ path('app_logout') }}" class="dropdown-item">
+									<i class="fa-solid fa-fw fa-power-off"></i>
+									Se déconnecter
+								</a>
+							</li>
+						</ul>
+					</li>
+				{% else %}
+					<li class="nav-item">
+						<a href="{{ path('app_login') }}" class="nav-link active">
+							<i class="fa-solid fa-arrow-right-to-bracket"></i>
+							Se connecter
+						</a>
+					</li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>

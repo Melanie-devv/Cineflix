@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des épisodes{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-center mb-2">
+            <div class="col">
+                <h1>Liste des épisodes</h1>
+            </div>
+
+            {% if is_granted('ROLE_USER')  %}
+                <div class="col-auto">
+                    <a class="btn btn-danger rounded-pill" href="{{ path('app_episode_new') }}">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="table-responsive border rounded">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Réalisateur</th>
+                        <th>Acteurs principaux</th>
+                        <th>Durée</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for episode in episodes %}
+                    <tr>
+                        <td>{{ episode.title }}</td>
+                        <td>{{ episode.serie.artist }}</td>
+                        <td>{{ episode.featuring|join(', ') }}</td>
+                        <td>{{ episode.readableDuration }}</td>
+                        <td>
+                            <a href="{{ path('app_episode_show', {'id': episode.id}) }}">show</a>
+                            {% if is_granted('ROLE_ADMIN')  %}
+                                <a href="{{ path('app_episode_edit', {'id': episode.id}) }}">edit</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
