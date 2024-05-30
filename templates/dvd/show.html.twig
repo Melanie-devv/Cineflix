@@ -3,40 +3,76 @@
 {% block title %}Dvd{% endblock %}
 
 {% block body %}
-    <h1>Dvd</h1>
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-center mb-2">
+            <div class="col-auto me-auto">
+                <a class="btn btn-danger rounded-pill" href="{{ path('app_dvd_index') }}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+            
+            {% if is_granted('ROLE_ADMIN')  %}
+                <div class="col-auto">
+                    <div class="row gx-1">
+                        <div class="col-auto">
+                            <a class="btn btn-danger rounded-pill" href="{{ path('app_dvd_edit', {'id': dvd.id}) }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            {{ include('dvd/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ dvd.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ dvd.name }}</td>
-            </tr>
-            <tr>
-                <th>Release_date</th>
-                <td>{{ dvd.releaseDate ? dvd.releaseDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Duration</th>
-                <td>{{ dvd.duration }}</td>
-            </tr>
-            <tr>
-                <th>Thumbnail</th>
-                <td>{{ dvd.thumbnail }}</td>
-            </tr>
-            <tr>
-                <th>Stock</th>
-                <td>{{ dvd.stock }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="row mb-3">
+            <div class="col-auto">
+                <img
+                    src="{{ dvd.thumbnail }}"
+                    alt="DVD thumbnail"
+                    class="img-fluid rounded"
+                    style="width: 15rem;"
+                >
+            </div>
+            <div class="col">
+                <h1 class="mb-0">
+                    {{ dvd.name }} de 
+                    <a class="link-danger link-underline-opacity-0 link-underline-opacity-100-hover" 
+                        href="{{ path('app_artist_show', { id: dvd.producer.id }) }}">
+                        {{ dvd.producer.name }}
+                    </a>
+                </h1><br />
+                {% if dvd.stock > 0 %}
+                    <button class="btn btn-primary mt-2">Réserver ce DVD</button>
+                    <p class="text-muted mt-2">
+                        Pour une durée d'un mois du {{ "now"|date('d/m/Y') }} au {{ "+1 month"|date('d/m/Y') }}. <br />
+                        A venir récupéré dans notre local situé au [adresse fictive].
+                    </p>
+                {% else %}
+                    <button class="btn btn-grey mt-2" disabled>Rupture de stock</button>
+                {% endif %}
+            </div>
+        </div>
 
-    <a href="{{ path('app_dvd_index') }}">back to list</a>
-
-    <a href="{{ path('app_dvd_edit', {'id': dvd.id}) }}">edit</a>
-
-    {{ include('dvd/_delete_form.html.twig') }}
+        <div class="table-responsive border rounded">
+            <table class="table mb-0">
+                <tbody>
+                    <tr>
+                        <th>Date de sortie</th>
+                        <td>{{ dvd.releaseDate ? dvd.releaseDate|date('d/m/Y') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Durée</th>
+                        <td>{{ dvd.readableDuration }}</td>
+                    </tr>
+                    <tr>
+                        <th>Quantité en stock</th>
+                        <td>{{ dvd.stock }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

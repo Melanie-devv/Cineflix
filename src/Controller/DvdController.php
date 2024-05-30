@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Dvd;
-use App\Form\DvdType;
+use App\Form\Dvd1Type;
 use App\Repository\DvdRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +26,7 @@ class DvdController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $dvd = new Dvd();
-        $form = $this->createForm(DvdType::class, $dvd);
+        $form = $this->createForm(Dvd1Type::class, $dvd);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +53,7 @@ class DvdController extends AbstractController
     #[Route('/{id}/edit', name: 'app_dvd_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Dvd $dvd, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(DvdType::class, $dvd);
+        $form = $this->createForm(Dvd1Type::class, $dvd);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

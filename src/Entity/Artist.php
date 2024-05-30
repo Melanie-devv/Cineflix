@@ -31,10 +31,14 @@ class Artist
     #[ORM\ManyToMany(targetEntity: Episode::class, mappedBy: 'featuring')]
     private Collection $featurings;
 
+    #[ORM\OneToMany(mappedBy: 'producer', targetEntity: Dvd::class)]
+    private Collection $dvds;
+
     public function __construct()
     {
         $this->series = new ArrayCollection();
         $this->featurings = new ArrayCollection();
+        $this->dvds = new ArrayCollection();
     }
 
     public function __toString()
@@ -135,6 +139,36 @@ class Artist
     {
         if ($this->featurings->removeElement($featuring)) {
             $featuring->removeFeaturing($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dvd>
+     */
+    public function getDvds(): Collection
+    {
+        return $this->dvds;
+    }
+
+    public function addDvd(Dvd $dvd): static
+    {
+        if (!$this->dvds->contains($dvd)) {
+            $this->dvds->add($dvd);
+            $dvd->setProducer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDvd(Dvd $dvd): static
+    {
+        if ($this->dvds->removeElement($dvd)) {
+            // set the owning side to null (unless already changed)
+            if ($dvd->getProducer() === $this) {
+                $dvd->setProducer(null);
+            }
         }
 
         return $this;

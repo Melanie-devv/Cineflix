@@ -3,41 +3,43 @@
 {% block title %}Dvd index{% endblock %}
 
 {% block body %}
-    <h1>Dvd index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Release_date</th>
-                <th>Duration</th>
-                <th>Thumbnail</th>
-                <th>Stock</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for dvd in dvds %}
-            <tr>
-                <td>{{ dvd.id }}</td>
-                <td>{{ dvd.name }}</td>
-                <td>{{ dvd.releaseDate ? dvd.releaseDate|date('Y-m-d') : '' }}</td>
-                <td>{{ dvd.duration }}</td>
-                <td>{{ dvd.thumbnail }}</td>
-                <td>{{ dvd.stock }}</td>
-                <td>
-                    <a href="{{ path('app_dvd_show', {'id': dvd.id}) }}">show</a>
-                    <a href="{{ path('app_dvd_edit', {'id': dvd.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-center mb-2">
+            <div class="col">
+                <h1>DVD</h1>
+            </div>
+            {% if is_granted('ROLE_USER') %}
+                <div class="col-auto">
+                    <a class="btn btn-danger rounded-pill" href="{{ path('app_dvd_new') }}">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
 
-    <a href="{{ path('app_dvd_new') }}">Create new</a>
+        <div class="row gy-3 mb-3">
+            {% for dvd in dvds %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="card mx-auto mx-sm-0 overflow-hidden" style="max-width: 16rem">
+                        <div class="card-img-top ratio ratio-1x1">
+                            <img src="{{ dvd.thumbnail }}" alt="DVD thumbnail" class="object-fit-cover">
+                        </div>
+                        <div class="card-body">
+                            {% if dvd.stock == 0 %}
+                                <span class="badge rounded-pill text-bg-danger">En rupture de stock</span>
+                            {% endif %}
+                            <h5 class="card-title mb-0">{{ dvd.name }}</h5>
+                            <a class="stretched-link" href="{{ path('app_dvd_show', {'id': dvd.id}) }}"></a>
+                            <p class="text-secondary mb-0">
+                                {{ dvd.releaseDate ? dvd.releaseDate|date('Y') : '' }} 
+                                - {{ dvd.readableDuration }}
+                            </p>                        
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
 {% endblock %}

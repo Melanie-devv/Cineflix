@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <h2>Films (réalisation)</h2>
+        <h2>Serie(s) (réalisation)</h2>
         <div class="row gy-2 mb-4">
             {% for serie in artist.series %}
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
@@ -63,7 +63,27 @@
                 </div>
             {% else %}
                 <div class="col">
-                    <div class="alert alert-info">Il ou elle n'a pas créé de film.</div>
+                    <div class="alert alert-info">Il ou elle n'a pas réalisé de séries.</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2>Film(s) (réalisation)</h2>
+        <div class="row gy-2 mb-4">
+            {% for dvd in artist.dvds %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="card mx-auto mx-sm-0" style="max-width: 16rem">
+                        <img src="{{ dvd.thumbnail }}" alt="dvd thumbnail" class="card-img-top">
+                        <div class="card-body">
+                            <h3 class="h5 card-title mb-0">{{ dvd.name }}</h3>
+                            {{ dvd.releaseDate ? dvd.releaseDate|date('Y') : '' }} 
+                            <a href="{{ path('app_dvd_show', {'id': dvd.id}) }}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col">
+                    <div class="alert alert-info">Il ou elle n'a pas réalisé de film.</div>
                 </div>
             {% endfor %}
         </div>

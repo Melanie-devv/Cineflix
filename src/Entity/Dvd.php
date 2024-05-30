@@ -34,6 +34,10 @@ class Dvd
     #[ORM\OneToMany(mappedBy: 'dvd', targetEntity: Reservation::class)]
     private Collection $reservations;
 
+    #[ORM\ManyToOne(inversedBy: 'dvds')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Artist $producer = null;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -132,5 +136,31 @@ class Dvd
         }
 
         return $this;
+    }
+
+    public function getProducer(): ?Artist
+    {
+        return $this->producer;
+    }
+
+    public function setProducer(?Artist $producer): static
+    {
+        $this->producer = $producer;
+
+        return $this;
+    }
+
+    public function getReadableDuration(): string
+    {
+        $duration = $this->getDuration();
+        $moreThanOneHour = $duration >= 60;
+
+        if ($moreThanOneHour) {
+            $hours = floor($duration / 60);
+            $minutes = $duration % 60;
+            return $hours . 'h' . $minutes;
+        } else {
+            return $duration . 'm';
+        }
     }
 }
