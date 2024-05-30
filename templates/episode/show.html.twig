@@ -48,23 +48,19 @@
             <table class="table mb-0">
                 <tbody>
                     <tr>
-                        <th>Id</th>
-                        <td>{{ episode.id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Title</th>
+                        <th>Titre</th>
                         <td>{{ episode.title }}</td>
                     </tr>
                     <tr>
-                        <th>Duration</th>
+                        <th>Durée</th>
                         <td>{{ episode.readableDuration }}</td>
                     </tr>
                     <tr>
-                        <th>serie</th>
+                        <th>Série</th>
                         <td>{{ episode.serie.title }}</td>
                     </tr>
                     <tr>
-                        <th>Acteur principaux</th>
+                        <th>Acteurs principaux</th>
                         <td>{{ episode.featuring|join(', ') }}</td>
                     </tr>
                 </tbody>

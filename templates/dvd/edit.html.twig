@@ -1,13 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Dvd{% endblock %}
+{% block title %}Modifier un DVD{% endblock %}
 
 {% block body %}
-    <h1>Edit Dvd</h1>
+    <div class="container mt-5 mb-5">
+        <div class="row mb-2 align-items-center">
+            <div class="col-auto">
+                <a class="btn btn-danger rounded-pill" href="{{ path('app_dvd_index') }}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
 
-    {{ include('dvd/_form.html.twig', {'button_label': 'Update'}) }}
+            <div class="col">
+                <h1>Modifier un DVD</h1>
+            </div>
 
-    <a href="{{ path('app_dvd_index') }}">back to list</a>
+            <div class="col-auto">
+                {{ include('dvd/_delete_form.html.twig') }}
+            </div>
+        </div>
 
-    {{ include('dvd/_delete_form.html.twig') }}
+        {{ include('dvd/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+    </div
+
 {% endblock %}

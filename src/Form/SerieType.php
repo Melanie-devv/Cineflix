@@ -14,18 +14,20 @@ class SerieType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('thumbnail')
+            ->add('title', null, ['label' => 'Titre'])
+            ->add('thumbnail', null, ['label' => 'Image'])
             ->add('releaseDate', DateType::class, [
                 'widget' => 'single_text',
+                'label' => 'Date de sortie'
             ])
-            ->add('artist')
+            ->add('artist', null, ['label' => 'Realisateur'])
             ->add('type', ChoiceType::class, [
                 'choices' => [
                     Serie::TYPES[0] => 0,
                     Serie::TYPES[1] => 1,
                     Serie::TYPES[2] => 2,
                 ],
+                'label' => 'Type'
             ])
         ;
     }
