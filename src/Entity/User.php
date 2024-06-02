@@ -168,4 +168,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function hasReservationOngoing(): bool
+    {
+        foreach ($this->reservations as $reservation) {
+            if ($reservation->isReservationOngoing()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function __toString(): string
+    {
+        return strtoupper($this->name) . ' ' . $this->firstname;
+    }
 }

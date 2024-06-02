@@ -64,4 +64,29 @@ class Reservation
 
         return $this;
     }
+
+    public function getReadableDebutReservation(): string
+    {
+        return $this->date_reservation->format('d/m/Y');
+    }
+
+    public function getReadableFinReservation(): string
+    {
+        $fin_reservation = new \DateTime($this->date_reservation->format('Y-m-d H:i:s'));
+        $fin_reservation->add(new \DateInterval('P1M'));
+        return $fin_reservation->format('d/m/Y');
+    }
+
+    public function isReservationOngoing(): bool
+    {
+        $fin_reservation = new \DateTime($this->date_reservation->format('Y-m-d H:i:s'));
+        $fin_reservation->add(new \DateInterval('P1M'));
+
+        return $fin_reservation > new \DateTime();
+    }
+
+    public function __toString(): string
+    {
+        return  $this->id;
+    }
 }

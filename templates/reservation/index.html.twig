@@ -1,35 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reservation index{% endblock %}
+{% block title %}Liste des reservations{% endblock %}
 
 {% block body %}
-    <h1>Reservation index</h1>
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-center mb-2">
+            <div class="col">
+                <h1>Liste des reservations</h1>
+            </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Date_reservation</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for reservation in reservations %}
-            <tr>
-                <td>{{ reservation.id }}</td>
-                <td>{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}">show</a>
-                    <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            {% if is_granted('ROLE_ADMIN')  %}
+                <div class="col-auto">
+                    <a class="btn btn-danger rounded-pill" href="{{ path('app_reservation_new') }}">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
 
-    <a href="{{ path('app_reservation_new') }}">Create new</a>
+        <div class="table-responsive border rounded">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Nom du DVD</th>
+                        <th>Début de reservation</th>
+                        <th>Fin de reservation</th>
+                        <th>actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for reservation in reservations %}
+                    <tr class="{{ reservation.isReservationOngoing() ? 'table-success' : 'table-secondary' }}">
+                        <td><strong>{{ reservation.getDvd().getName() }}</strong></td>
+                        <td>{{ reservation.getReadableDebutReservation() }}</td>
+                        <td>{{ reservation.getReadableFinReservation() }}</td>
+                        <td>
+                            {% if is_granted('ROLE_ADMIN')  %}
+                                <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                            {% else %}
+                                <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}">
+                                    En savoir plus
+                                </a>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN')  %}
+                                <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">
+                                    <i class="fa-solid fa-edit"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">Vous n'avez effectué aucune reservation.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

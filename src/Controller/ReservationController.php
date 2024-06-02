@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Reservation;
+use App\Entity\User;
+use App\Entity\Dvd;
 use App\Form\ReservationType;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,8 +19,16 @@ class ReservationController extends AbstractController
     #[Route('/', name: 'app_reservation_index', methods: ['GET'])]
     public function index(ReservationRepository $reservationRepository): Response
     {
+        $user = $this->getUser();
+    
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $reservations = $reservationRepository->findAll();
+        } else {
+            $reservations = $reservationRepository->findBy(['user' => $user]);
+        }
+    
         return $this->render('reservation/index.html.twig', [
-            'reservations' => $reservationRepository->findAll(),
+            'reservations' => $reservations,
         ]);
     }
 
@@ -75,6 +85,29 @@ class ReservationController extends AbstractController
             $entityManager->remove($reservation);
             $entityManager->flush();
         }
+
+        return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/add/{userId}/{dvdId}', name: 'app_reservation_add', methods: ['GET', 'POST'])]
+    public function add_reservation($userId, $dvdId, EntityManagerInterface $entityManager): Response
+    {
+        $user = $entityManager->getRepository(User::class)->find($userId);
+        $dvd = $entityManager->getRepository(Dvd::class)->find($dvdId);
+
+        if (!$user || !$dvd) {
+            throw $this->createNotFoundException(
+                'No user or dvd found for id '.$userId.' and '.$dvdId
+            );
+        }
+
+        $reservation = new Reservation();
+        $reservation->setUser($user);
+        $reservation->setDvd($dvd);
+        $reservation->setDateReservation(new \DateTime());
+
+        $entityManager->persist($reservation);
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
     }

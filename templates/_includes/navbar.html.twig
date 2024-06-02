@@ -51,6 +51,12 @@
 									Profil
 								</a>
 							</li>
+							<li>
+								<a href="{{ path('app_reservation_index') }}" class="dropdown-item">
+									<i class="fa-solid fa-fw fa-calendar-check"></i>
+									Réservations
+								</a>
+							</li>
 							{% if is_granted('ROLE_ADMIN') %}
 								<li>
 									<a href="{{ path('app_user_index') }}" class="dropdown-item">

@@ -163,4 +163,9 @@ class Dvd
             return $duration . 'm';
         }
     }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 }

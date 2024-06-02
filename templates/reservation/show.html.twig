@@ -1,26 +1,56 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reservation{% endblock %}
+{% block title %}Reservation #{{ reservation.id }}{% endblock %}
 
 {% block body %}
-    <h1>Reservation</h1>
+    <div class="container mt-5 mb-5">
+        <div class="row align-items-center mb-2">
+            <div class="col-auto me-auto">
+                <a class="btn btn-danger rounded-pill" href="{{ path('app_reservation_index') }}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+            
+            {% if is_granted('ROLE_ADMIN')  %}
+                <div class="col-auto">
+                    <div class="row gx-1">
+                        <div class="col-auto">
+                            <a class="btn btn-danger rounded-pill" href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            {{ include('reservation/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ reservation.id }}</td>
-            </tr>
-            <tr>
-                <th>Date_reservation</th>
-                <td>{{ reservation.dateReservation ? reservation.dateReservation|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_reservation_index') }}">back to list</a>
-
-    <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">edit</a>
-
-    {{ include('reservation/_delete_form.html.twig') }}
+        <div class="row mb-3">
+            <div class="col-auto">
+                <img
+                    src="{{ reservation.dvd.thumbnail }}"
+                    alt="dvd thumbnail"
+                    class="img-fluid rounded"
+                    style="width: 15rem;"
+                >
+            </div>
+            <div class="col">
+                <h1 class="mb-0">Reservation #{{ reservation.id }}</h1><br />
+                <p class="text-secondary lead">
+                    Réservé de <strong>{{ reservation.getReadableDebutReservation }}</strong> à <strong>{{ reservation.getReadableFinReservation }}</strong> - 
+                    {% if reservation.isReservationOngoing %}
+                        Cette réservation est en cours
+                    {% else %}
+                        Cette réservation est terminée
+                    {% endif %}
+                </p><br />
+                <h2 class="mb-0">Pour le film <a class="link-danger link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ path('app_dvd_show', {'id': reservation.dvd.id}) }}">{{ reservation.dvd.name }}</a></h2><br />
+                {% if is_granted('ROLE_ADMIN') %}
+                    <h4 class="mb-0">Réservé par <a class="link-danger link-underline-opacity-0 link-underline-opacity-100-hover" href="{{ path('app_user_show', {'id': reservation.user.id}) }}">{{ reservation.user }}</a></h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
