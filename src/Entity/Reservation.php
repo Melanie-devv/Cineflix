@@ -84,9 +84,4 @@ class Reservation
 
         return $fin_reservation > new \DateTime();
     }
-
-    public function __toString(): string
-    {
-        return  $this->id;
-    }
 }
