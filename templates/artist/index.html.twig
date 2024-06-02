@@ -15,6 +15,12 @@
                     </a>
                 </div>
             {% endif %}
+            <div class="col-auto">
+                <form action="{{ path('app_artist_index') }}" method="get">
+                    <input type="text" name="search" placeholder="Rechercher un artiste">
+                    <button type="submit">Rechercher</button>
+                </form>
+            </div>
         </div>
 
         <div class="row gy-3 mb-3">
@@ -29,6 +35,10 @@
                             <a class="stretched-link" href="{{ path('app_artist_show', {'id': artist.id}) }}"></a>
                         </div>
                     </div>
+                </div>
+            {% else %}
+                <div class="col">
+                    <p class="fs-3 bg-light text-danger">Aucun résultat trouvé</p>
                 </div>
             {% endfor %}
         </div>

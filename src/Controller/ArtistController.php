@@ -16,10 +16,18 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ArtistController extends AbstractController
 {
     #[Route('/', name: 'app_artist_index', methods: ['GET'])]
-    public function index(ArtistRepository $artistRepository): Response
+    public function index(Request $request, ArtistRepository $artistRepository): Response
     {
+        $search = $request->query->get('search');
+    
+        if ($search) {
+            $artists = $artistRepository->findBy(['name' => $search]);
+        } else {
+            $artists = $artistRepository->findAll();
+        }
+    
         return $this->render('artist/index.html.twig', [
-            'artists' => $artistRepository->findAll(),
+            'artists' => $artists,
         ]);
     }
 

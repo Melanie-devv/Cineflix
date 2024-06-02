@@ -16,10 +16,23 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class EpisodeController extends AbstractController
 {
     #[Route('/', name: 'app_episode_index', methods: ['GET'])]
-    public function index(EpisodeRepository $episodeRepository): Response
+    public function index(Request $request, EpisodeRepository $episodeRepository): Response
     {
+        $search = $request->query->get('search');
+    
+        if ($search) {
+            $episodes = $episodeRepository->createQueryBuilder('e')
+                ->leftJoin('e.serie', 's')
+                ->where('e.title LIKE :term OR s.title LIKE :term')
+                ->setParameter('term', '%' . $search . '%')
+                ->getQuery()
+                ->getResult();
+        } else {
+            $episodes = $episodeRepository->findAll();
+        }
+    
         return $this->render('episode/index.html.twig', [
-            'episodes' => $episodeRepository->findAll(),
+            'episodes' => $episodes,
         ]);
     }
 

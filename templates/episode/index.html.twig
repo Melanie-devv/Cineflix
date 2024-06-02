@@ -16,6 +16,13 @@
                     </a>
                 </div>
             {% endif %}
+
+            <div class="col-auto">
+                <form action="{{ path('app_episode_index') }}" method="get">
+                    <input type="text" name="search" placeholder="Rechercher un épisode">
+                    <button type="submit">Rechercher</button>
+                </form>
+            </div>
         </div>
 
         <div class="table-responsive border rounded">
@@ -45,7 +52,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="4">no records found</td>
+                        <td colspan="5" class="fs-3 bg-light text-danger">Aucun résultat trouvé</td>
                     </tr>
                 {% endfor %}
                 </tbody>
